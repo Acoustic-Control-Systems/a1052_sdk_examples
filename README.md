@@ -7,12 +7,12 @@ See https://acs-international.com/instruments/oem-ultrasonic-pulser-receiver-uni
 
 This repository contains examples and resources organized into the following directories:
 
-### `PythonExample`
+### [PythonExample](PythonExample)
 Python integration example demonstrating how to use the A1052 SDK with Python through .NET interop using pythonnet. Includes:
 - `simple_example.py` - Complete working example with device connection, configuration, and data acquisition
 - `python_example_readme.md` - Detailed setup and usage instructions
 
-### `CsharpExample`
+### [CsharpExample](CsharpExample)
 C# .NET example showing native SDK usage in a console application. Contains:
 - `Program.cs` - Main example demonstrating SDK initialization, device connection, and data handling
 
