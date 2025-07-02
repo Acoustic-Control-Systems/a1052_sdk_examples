@@ -9,22 +9,23 @@ This repository contains examples and resources organized into the following dir
 
 ### [PythonExample](PythonExample)
 Python integration example demonstrating how to use the A1052 SDK with Python through .NET interop using pythonnet. Includes:
-- `simple_example.py` - Complete working example with device connection, configuration, and data acquisition
-- `python_example_readme.md` - Detailed setup and usage instructions
+- [simple_example.py](PythonExample/simple_example.py) - Complete working example with device connection, configuration, and data acquisition
+- [python_example_readme.md](PythonExample/python_example_readme.md) - Detailed setup and usage instructions
 
 ### [CsharpExample](CsharpExample)
 C# .NET example showing native SDK usage in a console application. Contains:
-- `Program.cs` - Main example demonstrating SDK initialization, device connection, and data handling
+
+- [Program.cs](CsharpExample/Program.cs) - Main example demonstrating SDK initialization, device connection, and data handling
 
 ## Getting Started
 
 1. **Choose your preferred language example:**
-   - For Python: Navigate to `/PythonExample` and follow the setup in `python_example_readme.md`
-   - For C#: Open `/CsharpExample/CsharpExample.sln` in Visual Studio
+   - For Python: Navigate to [PythonExample](PythonExample) and follow the setup in [python_example_readme.md](PythonExample/python_example_readme.md)
+   - For C#: Open [CsharpExample/CsharpExample.sln](CsharpExample/CsharpExample.sln) in Visual Studio
 
 2. **Prerequisites:**
    - A1052 Multisonic device
-   - SDK DLL files in the `/SDK` directory
+   - SDK DLL files in the `SDK` directory
    - Device network connection (via device's WiFi access point)
 
 3. **Configuration:**
