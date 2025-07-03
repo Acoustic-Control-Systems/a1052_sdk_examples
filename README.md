@@ -5,7 +5,11 @@ See https://acs-international.com/instruments/oem-ultrasonic-pulser-receiver-uni
 
 ## Repository Structure
 
-This repository contains examples and resources organized into the following directories:
+This repository contains examples and resources organized into the following elements:
+
+### SDK reference manual
+
+[a1052_sdk_reference.md](a1052_sdk_reference.md) gives overview of methods and events implemented in the SDK
 
 ### [PythonExample](PythonExample)
 Python integration example demonstrating how to use the A1052 SDK with Python through .NET interop using pythonnet. Includes:
