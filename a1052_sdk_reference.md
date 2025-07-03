@@ -4,7 +4,7 @@ This document provides comprehensive API reference for the A10x SDK .NET library
 
 ## Overview
 
-The A10x SDK provides .NET wrapper access to MiraNeo device communication. The main classes are:
+The A10x SDK provides .NET wrapper access to A10x-series device communication. The main classes are:
 - `A10xSdk` - Abstract base class for all A10x series devices
 - `A1052SDK` - Concrete implementation for A1052 devices (32-channel, 8x4 configuration)
 
@@ -130,22 +130,6 @@ Start A-scan acquisition for a quadro transmitter on the A1052 device.
 ```csharp
 sdk.SetQuadro8x4Transmitter(0);  // Select quadro transmitter (0-based)
 sdk.StartAscanQuadroTransmitter();
-```
-
-#### RequestDiagnosticInfo()
-```csharp
-public void RequestDiagnosticInfo()
-```
-Request diagnostic information from the A1052 device.
-
-**Note:** The `DiagnosticInfoReceived` event will be triggered when the information is received.
-
-**Example:**
-```csharp
-sdk.DiagnosticInfoReceived += (diagnosticInfo) => {
-    Console.WriteLine($"Diagnostic info received: {diagnosticInfo}");
-};
-sdk.RequestDiagnosticInfo();
 ```
 
 ### A1052 Configuration Methods
@@ -316,7 +300,7 @@ void ProcessAscanData(short[] data, int size, int transmitterIndex) {
 sdk.Connect("192.168.1.31");
 ```
 
-#### Battery and Diagnostic Monitoring
+#### Battery Monitoring
 
 ```csharp
 var sdk = new A1052SDK();
@@ -326,24 +310,14 @@ sdk.MasterBatteryInfoReceived += (batteryInfo) => {
     Console.WriteLine($"A1052 Battery Info: {batteryInfo}");
 };
 
-sdk.DiagnosticInfoReceived += (diagnosticInfo) => {
-    Console.WriteLine($"A1052 Diagnostic Info: {diagnosticInfo}");
-};
-
-sdk.ButtonPressed += () => {
-    Console.WriteLine("A1052 button was pressed");
-    // Request diagnostic info when button is pressed
-    sdk.RequestDiagnosticInfo();
-};
-
 sdk.NetworkConnected += (connected) => {
     if (connected) {
         // Request initial battery info
         sdk.RequestBatteryInfo();
         
-        // Start periodic diagnostic requests
+        // Start periodic battery requests
         var timer = new System.Timers.Timer(30000); // Every 30 seconds
-        timer.Elapsed += (s, e) => sdk.RequestDiagnosticInfo();
+        timer.Elapsed += (s, e) => sdk.RequestBatteryInfo();
         timer.Start();
     }
 };
@@ -395,7 +369,6 @@ The A1052SDK inherits from the abstract `A10xSdk` class. Below are the inherited
 
 - `NetworkConnected`: Fired when network connection status changes
 - `NetworkDisconnected`: Fired when network disconnects
-- `DiagnosticInfoReceived`: Fired when diagnostic information is received
 
 ### Inherited Methods
 
@@ -445,7 +418,7 @@ public class ParametersLimits
 - **Sample rate**: Fixed at 4096 samples per A-scan
 - **Operating frequency**: 10-200 KHz
 - **Gain range**: 0-36 dB
-- **Connection**: Ethernet (TCP/IP)
+- **Connection**: WiFi (TCP/IP)
 
 ## Best Practices for A1052
 
