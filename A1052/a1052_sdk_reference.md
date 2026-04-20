@@ -1,6 +1,6 @@
-# A10x SDK API Reference
+# A1052 SDK API Reference
 
-This document provides comprehensive API reference for the A10x SDK .NET library.
+This document provides comprehensive API reference for `A1052SDK` and the relevant inherited members from `A10xSdk`.
 
 ## Overview
 
@@ -45,13 +45,27 @@ Gets or sets the IP address of the A1052 device to connect to.
 sdk.DeviceIP = "192.168.1.31";
 ```
 
+#### IsConnected
+```csharp
+public bool IsConnected { get; }
+```
+
+Inherited from `A10xSdk`. Returns `true` while the communication task is running.
+
+#### IsCommunicationCancelled
+```csharp
+public bool IsCommunicationCancelled { get; }
+```
+
+Inherited from `A10xSdk`. Returns `true` when the SDK cancellation token has been triggered.
+
 ### A1052-Specific Events
 
 #### AscanDataReceived
 ```csharp
 public event Action<short[], int, TimeSpan>? AscanDataReceived;
 ```
-Fired when A-scan data is received from the A1052 device.
+Fired when A-scan data is received from the A1052 device. The event provides the A-scan data as an array of short integers, the size of the data in samples, and the timestamp of acquisition. One array contains samples from all device channels sequentially (e.g. 32 channels x 4096 samples = 131072 array length).
 
 **Parameters:**
 - `data`: Array of A-scan data samples (short values)
@@ -361,30 +375,97 @@ sdk.Connect("192.168.1.31");
 
 ---
 
-## Base Class: A10xSdk
+## Inherited Events From A10xSdk
 
-The A1052SDK inherits from the abstract `A10xSdk` class. Below are the inherited methods and events available to A1052SDK.
+### NetworkConnected
 
-### Inherited Events
+```csharp
+public event Action<bool>? NetworkConnected;
+```
 
-- `NetworkConnected`: Fired when network connection status changes
-- `NetworkDisconnected`: Fired when network disconnects
+Raised when the SDK connection state changes.
 
-### Inherited Methods
+### NetworkDisconnected
 
-- `StopCommunication()`: Stop communication with all devices
-- `StopAcquisition()`: Set device to idle state
-- `SetOperatingFrequency(int frequency)`: Set operating frequency
-- `SetGain(int gain)`: Set gain value
-- `SetAscanAveraging(int averaging)`: Set A-scan averaging
-- `SetPulseRepetitionRate(double rate)`: Set pulse repetition rate
-- `RequestBatteryInfo()`: Request battery information from both devices
-- `SetLedMask(int mask)`: Set LED mask (bitmask or bool array)
-- `SetLedMask(bool[] maskArray)`: Set LED mask (from bool array)
-- `RequestIdent()`: Request device identification by blinking LEDs
-- `SetPeriods(float periods)`: Set periods number in one burst (float).
-- `SetSingle8x4Transmitter(int sensor)`: Set transmitter index for 32-channels device in single mode
-- `SetQuadro8x4Transmitter(int sensor)`: Set transmitter index for 32-channels device in quadro mode
+```csharp
+public event Action? NetworkDisconnected;
+```
+
+Raised when device communication disconnects and cleanup has completed.
+
+### MasterBatteryInfoReceived
+
+```csharp
+public event Action<BatteryResult>? MasterBatteryInfoReceived;
+```
+
+Raised when battery information is received from the A1052 device.
+
+### DiagnosticInfoReceived
+
+```csharp
+public event Action<DiagnosticInfo>? DiagnosticInfoReceived;
+```
+
+Raised when diagnostic information is received from the device.
+
+### ButtonPressed
+
+```csharp
+public event Action? ButtonPressed;
+```
+
+Raised when the device button short-press event is received.
+
+## Inherited Methods From A10xSdk
+
+### Connection And Lifecycle
+
+```csharp
+public void StopCommunication()
+public void Disconnect()
+public void Dispose()
+```
+
+- `StopCommunication()` sends a finish-communication message to the device layer
+- `Disconnect()` disposes the communication engine and triggers the normal disconnection flow
+- `Dispose()` releases SDK resources and waits for disconnect handling when needed
+
+### Signal And Acquisition Configuration
+
+```csharp
+public void StopAcquisition()
+public void SetOperatingFrequency(int frequency)
+public void SetGain(int gain)
+public void SetAscanAveraging(int averaging)
+public void SetPulseRepetitionRate(double rate)
+public void SetPeriods(float periods)
+```
+
+- `StopAcquisition()` returns the device to idle state
+- `SetOperatingFrequency(int)` accepts values from `ParametersLimits.OPERATING_FREQUENCY_MIN` to `ParametersLimits.OPERATING_FREQUENCY_MAX`
+- `SetGain(int)` accepts values from `ParametersLimits.ANALOG_GAIN_MIN` to `ParametersLimits.ANALOG_GAIN_MAX`
+- `SetAscanAveraging(int)` accepts values from `ParametersLimits.AVERAGING_MIN` to `ParametersLimits.AVERAGING_MAX`
+- `SetPulseRepetitionRate(double)` accepts values from `ParametersLimits.PULSE_REPETITION_RATE_MIN` to `ParametersLimits.PULSE_REPETITION_RATE_MAX`
+- `SetPeriods(float)` accepts values from `ParametersLimits.BURST_PERIODS_MIN` to `ParametersLimits.BURST_PERIODS_MAX`
+
+### Transmitter Selection, Battery, LEDs, And Identification
+
+```csharp
+public void SetSingle8x4Transmitter(int sensor)
+public void SetQuadro8x4Transmitter(int sensor)
+public void RequestBatteryInfo()
+public void SetLedMask(int mask)
+public void SetLedMask(bool[] maskArray)
+public void RequestIdent()
+```
+
+- `SetSingle8x4Transmitter(int)` selects a single transmitter in the 32-channel 8x4 layout
+- `SetQuadro8x4Transmitter(int)` selects a quadro transmitter group in the 8x4 layout
+- `RequestBatteryInfo()` requests battery status from the connected A1052 device
+- `SetLedMask(int)` sets the device LEDs from a bitmask
+- `SetLedMask(bool[])` sets the device LEDs from an array of boolean states
+- `RequestIdent()` asks the device to identify itself by blinking LEDs
 
 ## Parameter Limits
 
@@ -415,8 +496,8 @@ public class ParametersLimits
 - **Channels**: 32 (8x4 configuration)
 - **Transmitter modes**: Single (0-31) or Quadro (0-7 groups)
 - **Data format**: 16-bit signed integers (short)
-- **Sample rate**: Fixed at 4096 samples per A-scan
-- **Operating frequency**: 10-200 KHz
+- **A-scan sample count**: 4096 samples per channel
+- **Operating frequency**: 10-100 KHz
 - **Gain range**: 0-36 dB
 - **Connection**: WiFi (TCP/IP)
 
@@ -445,3 +526,8 @@ public class ParametersLimits
 - Reduce pulse repetition rate if data processing can't keep up
 - Use appropriate averaging settings
 - Process A-scan data in background thread if needed
+
+## Example Files In This Repository
+
+- [CsharpExample/Program.cs](CsharpExample/Program.cs)
+- [PythonExample/a1052_example.py](PythonExample/a1052_example.py)

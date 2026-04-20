@@ -34,7 +34,7 @@ def load_sdk_dlls(sdk_folder_path: str):
     clr.AddReference(os.path.join(sdk_folder_path, "System.Diagnostics.DiagnosticSource.dll"))
 
 
-sdk_folder = r"..\SDK"
+sdk_folder = r"..\..\SDK"
 
 load_sdk_dlls(sdk_folder)
 

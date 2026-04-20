@@ -66,7 +66,7 @@ def check_sdk_version(required_version:str)-> str | None:
         logger.error(f"Version check failed: {e}")
         return None
 
-sdk_folder = r"..\sdk"
+sdk_folder = r"..\..\SDK"
 
 load_sdk_dlls(sdk_folder)
 
@@ -78,7 +78,7 @@ if not sdk_version:
     logger.warning("Cannot verify SDK version. Proceeding with caution...")
 
 
-def simple_example():
+def a1052_example():
     """
     Simple example showing basic A10x SDK usage in Python
     """
@@ -154,8 +154,8 @@ def simple_example():
         logger.info("Disconnected from device")
 
 if __name__ == "__main__":
-    logger.info("Starting simple A10x SDK example...")
-    success = simple_example()
+    logger.info("Starting A1052 SDK example...")
+    success = a1052_example()
     
     if success:
         logger.info("Example completed successfully!")

@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <Reference Include="A10x_SDK">
-      <HintPath>..\SDK\A10x_SDK.dll</HintPath>
+      <HintPath>..\..\SDK\A10x_SDK.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

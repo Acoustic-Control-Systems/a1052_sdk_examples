@@ -2,45 +2,30 @@
 
 Examples for integrating A1052 and A1040 devices with the A10x SDK.
 
-See https://acs-international.com/instruments/oem-ultrasonic-pulser-receiver-units/a1052-multisonic/ for more information about the A1052 device family.
+The repository is structured by device type. Each device has its own C# example, Python example, and reference document.
 
 ## Repository Structure
 
-### SDK reference manuals
+### [A1052](A1052)
 
-- [a1052_sdk_reference.md](a1052_sdk_reference.md) covers `A1052SDK`
-- [a1040_sdk_reference.md](a1040_sdk_reference.md) covers `A1040SDK`
+- [A1052/a1052_sdk_reference.md](A1052/a1052_sdk_reference.md)
+- [A1052/CsharpExample/CsharpExample.sln](A1052/CsharpExample/CsharpExample.sln)
+- [A1052/CsharpExample/Program.cs](A1052/CsharpExample/Program.cs)
+- [A1052/PythonExample/a1052_example.py](A1052/PythonExample/a1052_example.py)
+- [A1052/PythonExample/python_example_readme.md](A1052/PythonExample/python_example_readme.md)
 
-### [PythonExample](PythonExample)
+### [A1040](A1040)
 
-Python integration examples demonstrating how to use the SDK with Python through pythonnet.
+- [A1040/a1040_sdk_reference.md](A1040/a1040_sdk_reference.md)
+- [A1040/CsharpExample/CsharpA1040Example.csproj](A1040/CsharpExample/CsharpA1040Example.csproj)
+- [A1040/CsharpExample/Program.cs](A1040/CsharpExample/Program.cs)
+- [A1040/PythonExample/a1040_example.py](A1040/PythonExample/a1040_example.py)
+- [A1040/PythonExample/python_example_readme.md](A1040/PythonExample/python_example_readme.md)
 
-- [simple_example.py](PythonExample/simple_example.py) shows A1052 usage
-- [a1040_example.py](PythonExample/a1040_example.py) shows A1040 usage
-- [python_example_readme.md](PythonExample/python_example_readme.md) contains setup and usage notes
-
-### [CsharpExample](CsharpExample)
-
-C# example showing native `A1052SDK` usage in a console application.
-
-- [Program.cs](CsharpExample/Program.cs) demonstrates SDK initialization, connection, and A-scan handling
-
-### [CsharpA1040Example](CsharpA1040Example)
-
-C# example showing native `A1040SDK` usage in a console application.
-
-- [Program.cs](CsharpA1040Example/Program.cs) demonstrates an `8x4` flow and includes commented `16x4` and `8x8` examples
 
 ## Getting Started
 
-1. Choose an example:
-   - For Python, go to [PythonExample](PythonExample) and follow [python_example_readme.md](PythonExample/python_example_readme.md)
-   - For C# A1052, open [CsharpExample/CsharpExample.sln](CsharpExample/CsharpExample.sln)
-   - For C# A1040, open [CsharpA1040Example/CsharpA1040Example.csproj](CsharpA1040Example/CsharpA1040Example.csproj)
-
-2. Prerequisites:
-   - An A1052 or A1040 device
-   - SDK DLL files in the `SDK` directory
-   - Device network connectivity
-
-3. Update the device IP addresses in the examples to match your hardware.
+1. Choose the device family you want to work with: `A1052` or `A1040`.
+2. Use the device-specific C# or Python example under that folder.
+3. Update the device IP addresses in the example code to match your hardware.
+4. Ensure the shared SDK DLLs are present in [`SDK`](SDK).
