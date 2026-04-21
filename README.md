@@ -1,6 +1,8 @@
 # A1052 SDK examples
 
-Examples for integrating A1052 devices with the A1052 SDK.
+Examples for integrating A1052 MultiSonic devices with the A1052 SDK.
+
+> The **A1052 SDK** can be found on [our server](https://license.acs-international.online/product/21).
 
 ## Repository Structure
 
