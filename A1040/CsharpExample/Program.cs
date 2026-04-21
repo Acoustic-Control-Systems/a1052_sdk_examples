@@ -62,6 +62,7 @@ sdk.SlaveBatteryInfoReceived += (BatteryResult batteryInfo) =>
 
 logger.LogInformation("Connecting in 8x4 mode...");
 sdk.Connect8x4(MasterIP);
+await Task.Delay(1000); // wait a moment for connection to establish
 
 logger.LogInformation("SDK Status - IsRunning: {IsRunning}, IsCancelled: {IsCancelled}", sdk.IsConnected, sdk.IsCommunicationCancelled);
 
@@ -113,10 +114,6 @@ for (int i = 0; i < 5; i++)
         break;
     }
 }
-
-await Task.Delay(1000);
-sdk.Disconnect();
-await Task.Delay(500);
 
 // --- 16x4 mode (paired devices) ---
 // Uncomment and adapt the following section to use 16x4 mode:
@@ -173,3 +170,26 @@ await Task.Delay(500);
 // sdk8x8.RequestSlaveBatteryInfo();
 // sdk8x8.StopAcquisition();
 // sdk8x8.Disconnect();
+
+
+//// Example collecting B-Scan
+// Emit with transmitter channel 0, receiving with all channels, then tx 1,2... until tx 30, then stop acquisition.
+// In real application you have to control acquired data and not just wait for some time as in this example.
+
+for (int txChannel = 0; txChannel < 31; txChannel++)
+{
+    sdk.SetSingle8x4Transmitter(txChannel);
+    sdk.StartAscanSingleTransmitter();
+    logger.LogInformation("Started A-Scan with Single transmitter channel {TxChannel}, waiting for data...", txChannel);
+
+    // Wait for some data to be received before switching to the next transmitter channel
+    await Task.Delay(500);
+}
+sdk.StopAcquisition();
+logger.LogInformation("Completed B-Scan acquisition");
+
+await Task.Delay(1000);
+
+logger.LogInformation("Disconnecting SDK...");
+sdk.Disconnect();
+await Task.Delay(500);

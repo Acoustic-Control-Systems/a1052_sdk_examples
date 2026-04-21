@@ -57,6 +57,7 @@ sdk.MasterBatteryInfoReceived += (BatteryResult batteryInfo) =>
 
 logger.LogInformation("Starting SDK...");
 sdk.Connect(DeviceIP);
+await Task.Delay(1000); // wait a moment for connection to establish
 
 logger.LogInformation("SDK Status - IsRunning: {IsRunning}, IsCancelled: {IsCancelled}", sdk.IsConnected, sdk.IsCommunicationCancelled);
 

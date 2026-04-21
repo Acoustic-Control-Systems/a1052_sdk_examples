@@ -92,6 +92,19 @@ def a1040_example():
         sdk.StopAcquisition()
         logger.info("Stopped quadro-transmitter acquisition")
 
+        # Example collecting B-Scan
+        # Emit with transmitter channel 0, receiving with all channels, then tx 1,2... until tx 30, then stop acquisition.
+        # In real application you have to control acquired data and not just wait for some time as in this example.
+        for tx in range(32):
+            sdk.SetSingle8x4Transmitter(tx)
+            logger.info("Starting A-scan with single transmitter %s...", tx)
+            sdk.StartAscanSingleTransmitter()
+            time.sleep(0.5)
+
+        sdk.StopAcquisition()
+        logger.info("Stopped B-Scan acquisition")
+        time.sleep(0.5)
+
         sdk.AscanDataReceived -= on_data_received
         return True
 
