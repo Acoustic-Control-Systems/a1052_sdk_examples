@@ -1,11 +1,11 @@
 # A1052 SDK API Reference
 
-This document provides comprehensive API reference for `A1052SDK` and the relevant inherited members from `A10xSdk`.
+This document provides comprehensive API reference for `A1052SDK`.
 
 ## Overview
 
-The A10x SDK provides .NET wrapper access to A10x-series device communication. The main classes are:
-- `A10xSdk` - Abstract base class for all A10x series devices
+The A1052 SDK provides .NET wrapper access to A1052 device communication.
+
 - `A1052SDK` - Concrete implementation for A1052 devices (32-channel, 8x4 configuration)
 
 ---

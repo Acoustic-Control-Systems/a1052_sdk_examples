@@ -10,10 +10,9 @@ import os
 logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')
 logger = logging.getLogger(__name__)
 
-
 def load_sdk_dlls(sdk_folder_path: str):
     """
-    Load necessary A10x SDK DLLs from the specified folder.
+    Load the A1052 SDK DLLs from the specified folder.
     
     :param sdk_folder_path: Path to the folder containing A10x SDK DLLs. Could be relative or absolute.
     :type sdk_folder_path: str
@@ -35,7 +34,7 @@ def load_sdk_dlls(sdk_folder_path: str):
     # sys.path.append(dependencies_dir)
 
     # Add references to all required DLLs
-    clr.AddReference(os.path.join(sdk_folder_path, "A10x_SDK.dll"))
+    clr.AddReference(os.path.join(sdk_folder_path, sdk_file_name))
     clr.AddReference(os.path.join(sdk_folder_path, "Microsoft.Extensions.Logging.Abstractions.dll"))
     clr.AddReference(os.path.join(sdk_folder_path, "Microsoft.Extensions.DependencyInjection.Abstractions.dll"))
     clr.AddReference(os.path.join(sdk_folder_path, "System.Diagnostics.DiagnosticSource.dll"))
@@ -66,6 +65,7 @@ def check_sdk_version(required_version:str)-> str | None:
         logger.error(f"Version check failed: {e}")
         return None
 
+sdk_file_name = "A1052_SDK.dll"
 sdk_folder = r"..\..\SDK"
 
 load_sdk_dlls(sdk_folder)
@@ -83,10 +83,9 @@ def a1052_example():
     Simple example showing basic A10x SDK usage in Python
     """
     # Device IP address - change this to match your device
-    device_ip = "192.168.137.123"
-    
-
-        
+    # device_ip = "192.168.137.123"
+    device_ip = "192.168.1.31"
+            
     # Check if device is available
     if not A10xIdentity.IdentifyDevice(device_ip):
         logger.error(f"Cannot identify device at {device_ip}")
@@ -94,7 +93,7 @@ def a1052_example():
     
     # Get basic device info
     info = A10xIdentity.GetDeviceInfo(device_ip)
-    logger.info(f"Connected to device: Serial={info.Serial}, MAC={info.Mac}")
+    logger.info(f"Connected to device: Serial={info.Serial}, MAC={info.Mac}, Version={info.Version}")
     
     # Create SDK instance
     sdk = A1052SDK()
@@ -103,6 +102,13 @@ def a1052_example():
     if not has_feature("SetGain"):
         logger.error("Required feature 'SetGain' is not available in this SDK version.")
         return False
+
+    # Set up a simple data handler
+    def on_data_received(data, length, timestamp):
+        logger.info(f"Received {length} samples at {timestamp}")
+    
+    # Subscribe to data events
+    sdk.AscanDataReceived += on_data_received
     
     # there is no such feature in the SDK, but this is just an example
     # if not has_feature("ChangeDeviceIp"):
@@ -121,12 +127,6 @@ def a1052_example():
         sdk.SetQuadro8x4Transmitter(0) # for quadro mode (4 sensors in one column emit wave) set first column of sensors to transmit
         sdk.SetSingle8x4Transmitter(0) # for single mode (1 sensor emits wave) set first sensor to transmit
         
-        # Set up a simple data handler
-        def on_data_received(data, length, timestamp):
-            logger.info(f"Received {length} samples at {timestamp}")
-        
-        # Subscribe to data events
-        sdk.AscanDataReceived += on_data_received
         
         # Start acquisition
         sdk.StartAscanSingleTransmitter()
